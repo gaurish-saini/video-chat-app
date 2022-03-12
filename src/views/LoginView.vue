@@ -42,6 +42,8 @@
 
 <script>
 import Firebase from 'firebase/compat/app'
+import 'firebase/compat/auth'
+import 'firebase/compat/firestore'
 
 export default {
   data: function () {
@@ -55,7 +57,7 @@ export default {
     login: function () {
       const info = {
         email: this.email,
-        paassword: this.password
+        password: this.password
       }
 
       Firebase.auth()
