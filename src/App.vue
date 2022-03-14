@@ -1,10 +1,11 @@
 <template>
-  <NavigationBar :user="user" />
-  <router-view :user="user" />
+  <NavigationBar :user="user" @logout="logout" />
+  <router-view :user="user" @logout="logout" />
 </template>
 
 <script>
 import db from './db.js'
+import Firebase from 'firebase/compat/app'
 import NavigationBar from '@/components/NavigationBar'
 export default {
   name: 'AppView',
@@ -13,13 +14,22 @@ export default {
       user: null
     }
   },
+  methods: {
+    logout: function () {
+      Firebase.auth()
+        .signOut()
+        .then(() => {
+          this.user = null
+          this.$router.push('login')
+        })
+    }
+  },
   mounted() {
-    db.collection('users')
-      .doc('atNe27NkX1Ij80jJAfzX')
-      .get()
-      .then(snapshot => {
-        this.user = snapshot.data().name
-      })
+    Firebase.auth().onAuthStateChanged(user => {
+      if (user) {
+        this.user = user
+      }
+    })
   },
   components: {
     NavigationBar
