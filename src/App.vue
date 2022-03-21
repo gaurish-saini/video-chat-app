@@ -1,6 +1,6 @@
 <template>
   <NavigationBar :user="user" @logout="logout" />
-  <router-view :user="user" @logout="logout" />
+  <router-view :user="user" @logout="logout" @addRoom="addRoom" />
 </template>
 
 <script>
@@ -22,6 +22,12 @@ export default {
           this.user = null
           this.$router.push('login')
         })
+    },
+    addRoom: function (payload) {
+      db.collection('users').doc(this.user.uid).collection('rooms').add({
+        name: payload,
+        createdAt: Firebase.firestore.FieldValue.serverTimestamp()
+      })
     }
   },
   mounted() {
