@@ -1,6 +1,12 @@
 <template>
   <NavigationBar :user="user" @logout="logout" />
-  <router-view :user="user" @logout="logout" :rooms="rooms" @addRoom="addRoom" />
+  <router-view
+    :user="user"
+    @logout="logout"
+    :rooms="rooms"
+    @addRoom="addRoom"
+    @deleteRoom="deleteRoom"
+  />
 </template>
 
 <script>
@@ -29,6 +35,9 @@ export default {
         name: payload,
         createdAt: Firebase.firestore.FieldValue.serverTimestamp()
       })
+    },
+    deleteRoom: function (payload) {
+      db.collection('users').doc(this.user.uid).collection('rooms').doc(payload).delete()
     }
   },
   mounted() {
