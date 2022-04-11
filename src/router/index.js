@@ -3,6 +3,7 @@ import Home from '../views/HomeView.vue'
 import Login from '../views/LoginView.vue'
 import Register from '../views/RegisterView.vue'
 import Rooms from '../views/RoomsView.vue'
+import CheckIn from '../views/CheckInView.vue'
 
 const routes = [
   {
@@ -24,6 +25,11 @@ const routes = [
     path: '/rooms',
     name: 'Rooms',
     component: Rooms
+  },
+  {
+    path: '/checkin/:hostID/:roomID',
+    name: 'CheckIn',
+    component: CheckIn
   }
 ]
 
