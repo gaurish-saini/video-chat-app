@@ -4,6 +4,7 @@ import Login from '../views/LoginView.vue'
 import Register from '../views/RegisterView.vue'
 import Rooms from '../views/RoomsView.vue'
 import CheckIn from '../views/CheckInView.vue'
+import Chat from '../views/ChatView.vue'
 
 const routes = [
   {
@@ -30,6 +31,11 @@ const routes = [
     path: '/checkin/:hostID/:roomID',
     name: 'CheckIn',
     component: CheckIn
+  },
+  {
+    path: '/chat/:hostID/:roomID',
+    name: 'Chat',
+    component: Chat
   }
 ]
 
