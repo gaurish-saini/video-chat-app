@@ -24,7 +24,7 @@
         <div>
           <h5 class="mt-4">Pending</h5>
           <ul class="list-unstyled">
-            <li class="mb-1">
+            <li class="mb-1" v-for="attendee in attendeesPending" :key="attendee.id">
               <span>
                 <a type="button" class="mr-2" title="Approve attendee">
                   <font-awesome-icon icon="user"></font-awesome-icon>
@@ -33,7 +33,7 @@
                   <font-awesome-icon icon="trash"></font-awesome-icon>
                 </a>
               </span>
-              <span class="pl-1">name</span>
+              <span class="pl-1">{{ attendee.displayName }}</span>
             </li>
           </ul>
         </div>
@@ -55,6 +55,7 @@ export default {
   name: 'AttendeesView',
   data: function () {
     return {
+      attendeesPending: [],
       hostID: this.$route.params.hostID,
       roomID: this.$route.params.roomID,
       roomName: null,
@@ -77,6 +78,7 @@ export default {
     })
 
     roomRef.collection('attendees').onSnapshot(attendeeSnapshot => {
+      const tempPending = []
       let amCheckedIn = false
 
       attendeeSnapshot.forEach(attendeeDocument => {
@@ -87,7 +89,12 @@ export default {
         if (this.hostID == attendeeDocument.id) {
           this.hostDisplayName = attendeeDocument.data().displayName
         }
+        tempPending.push({
+          id: attendeeDocument.id,
+          displayName: attendeeDocument.data().displayName
+        })
       })
+      this.attendeesPending = tempPending
       if (!amCheckedIn) {
         this.$router.push(`/checkin/${this.hostID}/${this.roomID}`)
       }
