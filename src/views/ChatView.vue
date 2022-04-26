@@ -60,7 +60,9 @@ export default {
   name: 'AttendeesView',
   data: function () {
     return {
+      attendeesApproved: [],
       attendeesPending: [],
+      attendeeApproved: false,
       hostID: this.$route.params.hostID,
       roomID: this.$route.params.roomID,
       roomName: null,
@@ -97,6 +99,7 @@ export default {
 
     roomRef.collection('attendees').onSnapshot(attendeeSnapshot => {
       const tempPending = []
+      const tempApproved = []
       let amCheckedIn = false
 
       attendeeSnapshot.forEach(attendeeDocument => {
@@ -107,10 +110,25 @@ export default {
         if (this.hostID == attendeeDocument.id) {
           this.hostDisplayName = attendeeDocument.data().displayName
         }
-        tempPending.push({
-          id: attendeeDocument.id,
-          displayName: attendeeDocument.data().displayName
-        })
+        if (attendeeDocument.data().approved) {
+          if (this.user.uid == attendeeDocument.id) {
+            this.attendeeApproved = true
+          }
+
+          tempApproved.push({
+            id: attendeeDocument.id,
+            displayName: attendeeDocument.data().displayName,
+            approved: attendeeDocument.data().approved
+          })
+        } else {
+          if (this.user.uid == attendeeDocument.id) {
+            this.attendeesApproved = false
+          }
+          tempPending.push({
+            id: attendeeDocument.id,
+            displayName: attendeeDocument.data().displayName
+          })
+        }
       })
       this.attendeesPending = tempPending
       if (!amCheckedIn) {
