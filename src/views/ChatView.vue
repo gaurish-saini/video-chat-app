@@ -7,10 +7,20 @@
       </span>
     </div>
     <div class="row" v-if="(user !== null && user.uid == hostID) || attendeeApproved">
-      <div class="col-md-8"></div>
+      <div class="col-md-8">
+        <vue-webrtc
+          ref="webrtc"
+          width="100%"
+          :roomId="roomID"
+          v-on:joined-room="doAttendeeJoined"
+          v-on:left-room="doAttendeeLeft"
+        />
+      </div>
       <div class="col-md-4">
-        <button class="btn btn-primary mr-1">Join</button>
-        <button type="button" class="btn btn-danger mr-1">Leave</button>
+        <button class="btn btn-primary mr-1" v-if="!attendeeJoined && attendeeApproved">
+          Join
+        </button>
+        <button type="button" class="btn btn-danger mr-1" v-if="!attendeeJoined">Leave</button>
         <h4 class="mt-2">Attendees</h4>
         <ul class="list-unstyled">
           <li v-for="attendee in attendeesApproved" :key="attendee.id">
@@ -84,6 +94,7 @@ export default {
       attendeesApproved: [],
       attendeesPending: [],
       attendeeApproved: false,
+      attendeeJoined: false,
       hostID: this.$route.params.hostID,
       roomID: this.$route.params.roomID,
       roomName: null,
@@ -184,3 +195,19 @@ export default {
   }
 }
 </script>
+<style lang="scss">
+.video-list {
+  margin-bottom: 10px;
+  background: transparent !important;
+}
+.video-item {
+  width: 50%;
+  display: inline-block;
+  background: transparent !important;
+}
+
+.video-item video {
+  width: 100%;
+  height: auto;
+}
+</style>
